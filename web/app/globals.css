@@ -1,0 +1,37 @@
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-size: 16px;
+}
+
+header {
+    padding: 20px;
+    background: #F6F8FA;
+    border-bottom: 1px solid #D0D7DE;
+}
+
+header .brand {
+    color: #185EA5;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    flex-grow: 1;
+    margin: 20px 0;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    border-top: 1px solid #D0D7DE;
+}
+
+.main-body {
+    max-width: 1400px;
+    margin: auto;
+}
