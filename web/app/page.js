@@ -1,6 +1,6 @@
 'use client'
 
-import './css/index.css'
+import '@/app/css/index.css'
 import React from 'react';
 import Textarea from '@mui/joy/Textarea';
 import Switch from '@mui/joy/Switch';
@@ -14,6 +14,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import KeyIcon from '@mui/icons-material/Key';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import QRCode from 'qrcode';
 import {copy} from '@/components/util'
 
@@ -105,11 +106,11 @@ const NewMsg = ({setShowMsg, setShowResult}) => {
             AlertError('消息内容不能为空')
             return
         }
-        if (msg.length > 200) {
-            AlertError('消息最大长度是200个字符')
+        if (msg.length > 268) {
+            AlertError('消息最大长度是268个字符')
             return
         }
-        console.log(msg, genPwd, period, times)
+        // console.log(msg, genPwd, period, times)
         const result = await createMsg({
             content: msg, gen_pwd: genPwd, period: period, times: times
         })
@@ -119,7 +120,7 @@ const NewMsg = ({setShowMsg, setShowResult}) => {
         } else {
             AlertError(result.message)
         }
-        console.log(result)
+        // console.log(result)
     }
 
     return (
@@ -134,7 +135,7 @@ const NewMsg = ({setShowMsg, setShowResult}) => {
                     />
                 </FormControl>
 
-                <FormControl className="form-row">
+                <div className="form-row">
                     <FormLabel sx={{alignSelf: "center"}}>
                         需要查看密码？
                     </FormLabel>
@@ -142,9 +143,9 @@ const NewMsg = ({setShowMsg, setShowResult}) => {
                         name="gen_pwd"
                         onChange={event => event.target.checked ? setGenPwd(1) : setGenPwd(0)}
                     />
-                </FormControl>
+                </div>
 
-                <FormControl className="form-row">
+                <div className="form-row">
                     <FormLabel sx={{alignSelf: "center", minWidth: "70px"}}>展示时长：</FormLabel>
                     <Slider
                         name="period"
@@ -156,8 +157,8 @@ const NewMsg = ({setShowMsg, setShowResult}) => {
                         valueLabelFormat={(val) => `${val}秒`}
                         onChange={event => setPeriod(event.target.value)}
                     />
-                </FormControl>
-                <FormControl className="form-row">
+                </div>
+                <div className="form-row">
                     <FormLabel sx={{alignSelf: "center"}}>可查看次数：</FormLabel>
                     <Input
                         name="times"
@@ -171,7 +172,18 @@ const NewMsg = ({setShowMsg, setShowResult}) => {
                         sx={{maxWidth: "80px"}}
                         onChange={event => setTimes(parseInt(event.target.value))}
                     />
-                </FormControl>
+                </div>
+                <div className="tips">
+                    <Typography level='body-sm' startDecorator={<InfoOutlined />}>
+                        展示时长等于0为不限时，查看次数达到后会立即删除；
+                    </Typography>
+                    <Typography level='body-sm' >
+                        大于0时达到设置的时间和次数后才会删除；
+                    </Typography>
+                    <Typography level='body-sm' >
+                        查看次数大于1，展示时长大于0时，展示时长仅会影响当前页面的查看，不会影响实际的数据。
+                    </Typography>
+                </div>
                 <div>
                     <Button type="submit" size="lg" fullWidth>保存</Button>
                 </div>

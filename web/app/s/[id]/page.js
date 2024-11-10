@@ -46,19 +46,48 @@ const InputPwd = ({id, setData, setLifetime}) => {
     )
 }
 
+const Countdown = ({lifetime, fnDel}) => {
+    const [ttl, setTtl] = React.useState(lifetime)
+    const [inter, setInter] = React.useState(null)
+    const updateTTL = () => {
+        setTtl(ttl => {
+            if (ttl - 1 <= 0) {
+                fnDel(true)
+                return
+            }
+            return ttl - 1
+        })
+    }
+
+    React.useEffect(() => {
+        if (lifetime > 0 && !inter) {
+            const interval = setInterval(updateTTL, 1000)
+            setInter(interval)
+            return () => clearInterval(interval)
+        }
+    }, [lifetime])
+
+    return (
+        <Typography color="danger" variant="plain">倒计时: {ttl}秒</Typography>
+    )
+}
+
 export default function Page({params}) {
     const [del, setDel] = React.useState(false)
     const [data, setData] = React.useState(null)
     const [lifetime, setLifetime] = React.useState(0)
+    const [id, setId] = React.useState()
 
     React.useEffect(() => {
         const fetchData = async () => {
-            const result = await getMsg(params.id)
+            const id = (await params).id
+            const result = await getMsg(id)
             if (!ignore) {
                 if (result.code === 0) {
                     setLifetime(result.data.period)
                 }
                 setData(result)
+                setId(id)
             }
         }
         let ignore = false
@@ -66,13 +95,13 @@ export default function Page({params}) {
         return () => {
             ignore = true
         }
-    }, [params.id])
+    }, [params])
     
     if (!data) {
         return <Loading />
     }
     if (data.code === 1000) {
-        return <InputPwd id={params.id} setData={setData} setLifetime={setLifetime} />
+        return <InputPwd id={id} setData={setData} setLifetime={setLifetime} />
     }
     if (data.code !== 0) {
         return (
@@ -95,23 +124,11 @@ export default function Page({params}) {
         )
     }
 
-    const updateLifetime = () => {
-        if (lifetime - 1 === 0) {
-            setDel(true)
-            return
-        }
-        setLifetime(lifetime - 1)
-        setTimeout(updateLifetime, 1000)
-    }
-    if (lifetime > 0) {
-        setTimeout(updateLifetime, 1000)
-    }
-
     return (
         <Grid container justifyContent="center">
             <Grid xs={11} sm={11} md={8}>
                 <MsgBody body={data.data.content}/>
-                {lifetime > 0 && <Typography color="danger" variant="plain">{lifetime}</Typography>}
+                {lifetime > 0 && <Countdown lifetime={lifetime} fnDel={setDel} />}
             </Grid>
         </Grid>
     )

@@ -11,12 +11,15 @@ header {
     padding: 20px;
     background: #F6F8FA;
     border-bottom: 1px solid #D0D7DE;
+    display: flex;
+    justify-items: center;
 }
 
 header .brand {
     color: #185EA5;
     text-decoration: none;
     font-weight: bold;
+    margin-left: 5px;
 }
 
 main {

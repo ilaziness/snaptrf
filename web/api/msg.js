@@ -6,9 +6,9 @@ export const createMsg = async (data) => {
 }
 
 export const getMsg = async (id, pwd) => {
-    let url = `http://127.0.0.1:8080/msg/${id}/`
+    let url = `/msg/${id}/`
     if (pwd !== undefined) {
         url = `${url}${pwd}`
     }
-    return await fetch(url).then(resp => resp.json())
+    return await api.get(url).then(resp => resp.data)
 }
