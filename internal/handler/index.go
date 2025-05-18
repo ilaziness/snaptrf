@@ -91,6 +91,7 @@ func genPassword() string {
 	letters := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	rbuf := make([]byte, 6)
 	if _, err := rand.Read(rbuf); err != nil {
+		slog.Error(fmt.Sprintf("gen password err: %s", err))
 		return "C9BcjK"
 	}
 	passwd := make([]byte, 6)
@@ -115,8 +116,8 @@ func AddMsg(ctx *gin.Context) {
 		response.Render(ctx, nil, errors.New("有效时长最大不能超过10分钟"))
 		return
 	}
-	if req.Times > 10 {
-		response.Render(ctx, nil, errors.New("展示次数最大不能超过10次"))
+	if req.Times > 100 {
+		response.Render(ctx, nil, errors.New("查看次数最大不能超过10次"))
 		return
 	}
 	pwd := ""

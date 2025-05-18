@@ -1,0 +1,16 @@
+FROM golang:latest AS build
+WORKDIR /src
+CMD mkdir -p dst
+COPY . .
+RUN go env -w GOPROXY=https://goproxy.cn,direct
+RUN go mod tidy
+RUN go build -o ./dst/backend ./cmd/
+RUN ls -lh ./dst
+
+FROM ubuntu:latest
+WORKDIR /app
+COPY --from=build /src/dst/backend ./
+COPY --from=build /src/config ./config
+RUN chmod +x ./backend
+
+CMD ["./backend", "httpd"]

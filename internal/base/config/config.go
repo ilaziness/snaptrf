@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"fmt"
+	"os"
 	"path"
 	"strings"
 
@@ -49,6 +50,7 @@ func InitConfig() {
 	if err := viper.UnmarshalKey("redis", &R); err != nil {
 		panic(fmt.Errorf("decode config file err: %w", err))
 	}
+	setFromEnv()
 }
 
 func getConfigFile() (string, string, string) {
@@ -62,4 +64,20 @@ func getConfigFile() (string, string, string) {
 		panic(ErrFileName)
 	}
 	return filePath, nameSplit[0], nameSplit[1]
+}
+
+const (
+	envRedisAddress  = "REDIS_ADDRESS"
+	envRedisPassword = "REDIS_PASSWORD"
+)
+
+func setFromEnv() {
+	redisAddress := os.Getenv(envRedisAddress)
+	if redisAddress != "" {
+		R.Addr = redisAddress
+	}
+	redisPwd := os.Getenv(envRedisPassword)
+	if redisPwd != "" {
+		R.Password = redisPwd
+	}
 }

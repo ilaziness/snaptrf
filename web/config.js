@@ -1,9 +1,8 @@
-
 const config = {
-    // 前端域名
-    host: 'http://127.0.0.1:3000',
-    // 接口域名
-    apiHost: 'http://127.0.0.1:8080',
-}
+  // 前端域名
+  host: process.env.NEXT_PUBLIC_HOST,
+  // 接口域名
+  apiHost: process.env.NEXT_PUBLIC_API_HOST,
+};
 
-export default config
+export default config;

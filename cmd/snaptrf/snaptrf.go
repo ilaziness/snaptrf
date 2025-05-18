@@ -1,7 +1,6 @@
 package snaptrf
 
 import (
-	"context"
 	"log"
 	"net/http"
 
@@ -11,7 +10,6 @@ import (
 	"github.com/spf13/cobra"
 	"snaptrf/internal/base/config"
 	"snaptrf/internal/router"
-	"snaptrf/internal/task"
 	"snaptrf/pkg/storage/redis"
 )
 
@@ -60,5 +58,4 @@ func initServer(e *gin.Engine) {
 	}
 	redis.InitRedis(redisCfg)
 	router.InitRouter(e)
-	task.Tasker.Start(context.Background())
 }

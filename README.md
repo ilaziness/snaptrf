@@ -2,7 +2,7 @@
 
 ## 功能列表
 
-- 最长268个字符，数据最长保留24小时
+- 数据最长保留24小时
 - 支持设置密码查看
 - 支持设置展示时长，超过时间自动删除
 - 支持设置可查看次数
@@ -11,9 +11,25 @@
 
 ## 部署
 
-### 前端
+### docker部署
 
-进入web目录，安装`node`依赖，修改`config.js`里面的`host`和`apiHost`配置。
+1. 修改配置
+    - redis连接`deploy/.env`
+    - 后端配置`config/config.toml`, redis配置优先使用`.env`里面的
+    - 前端域名和接口地址配置 `web/.env`
+    - 修改服务对外端口 `deploy/docker-compose.yml`，修改宿主机端口映射
+2. 构建镜像并运行：`make`
+3. 清理文件：`make clean`
+
+> 默认是podman。
+> 
+> 如果是docker，请修改makefile中的`podman`为`docker`，`podman-compose`为`docker compose`。
+
+### 手动运行
+
+#### 前端
+
+进入web目录，`npm install`安装依赖，配置在`.env`文件。
 
 开发模式运行：
 
@@ -35,7 +51,7 @@ npm run start
 
 更多细节请参考`netx.js`官方的应用部署文档。
 
-### 后端
+#### 后端
 
 配置在`config/config.toml`文件
 

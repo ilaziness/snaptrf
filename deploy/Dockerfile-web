@@ -1,0 +1,15 @@
+FROM node:24-alpine AS build
+WORKDIR /src
+COPY ./web .
+RUN npm config set registry https://registry.npmmirror.com
+RUN rm -rf .next && npm install && npm run build
+
+FROM node:24-alpine
+WORKDIR /app
+COPY --from=build /src/.next ./.next
+COPY --from=build /src/public ./public
+COPY --from=build /src/package.json .
+COPY --from=build /src/.env ./.env
+RUN npm config set registry https://registry.npmmirror.com
+RUN npm install
+CMD ["npm", "run", "start"]
